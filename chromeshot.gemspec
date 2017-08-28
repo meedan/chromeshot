@@ -9,4 +9,6 @@ Gem::Specification.new do |s|
   s.files       = `git ls-files`.split($/)
   s.homepage    = 'https://github.com/meedan/chromeshot'
   s.license     = 'MIT'
+
+  s.add_dependency 'mini_magick'
 end

@@ -1,4 +1,5 @@
 require 'shellwords'
+require 'mini_magick'
 
 module Chromeshot
   class Screenshot
@@ -23,6 +24,27 @@ module Chromeshot
     def take_screenshot!(params = {})
       begin
         take_screenshot(params)
+      rescue => e
+        raise ChromeshotError.new("Error: #{e.message.inspect}")
+      end
+    end
+
+    def post_process_screenshot(options = {})
+      begin
+        image = MiniMagick::Image.open(options[:original])
+
+        w, h = image.width, image.height
+        ratio = w.to_f / h.to_f
+        extent = [w, h]
+
+        w = h * options[:proportion] if ratio < options[:proportion]
+        h = w / options[:proportion] if ratio > options[:proportion]
+
+        image.combine_options do |c|
+          c.gravity 'center'
+          c.extent [w, h].join('x')
+        end
+        image.write(options[:output])
       rescue => e
         raise ChromeshotError.new("Error: #{e.message.inspect}")
       end

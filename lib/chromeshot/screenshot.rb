@@ -6,13 +6,12 @@ module Chromeshot
 
     attr_accessor :debug_port
 
-    def initialize(options = {})
-      self.debug_port = options[:debug_port] || 9555
-      Chromeshot::Screenshot.setup_chromeshot(self.debug_port)
-    end
-
     def self.setup_chromeshot(debug_port)
       system "LC_ALL=C google-chrome --headless --hide-scrollbars --remote-debugging-port=#{debug_port} --disable-gpu --no-sandbox --ignore-certificate-errors &"
+    end
+
+    def initialize(options = {})
+      self.debug_port = options[:debug_port] || 9555
     end
 
     def take_screenshot(options = {})

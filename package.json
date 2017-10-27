@@ -1,0 +1,26 @@
+{
+  "name": "chromeshot",
+  "version": "1.0.0",
+  "description": "Captures a web page as a screenshot using Chrome-based screenshotting",
+  "main": "index.js",
+  "bin": {
+    "chromeshot": "take-screenshot.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meedan/chromeshot.git"
+  },
+  "author": "Meedan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/meedan/chromeshot/issues"
+  },
+  "homepage": "https://github.com/meedan/chromeshot#readme",
+  "dependencies": {
+    "chrome-remote-interface": "0.25.2",
+    "minimist": "1.2.0"
+  }
+}

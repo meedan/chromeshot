@@ -66,8 +66,6 @@ CDP({ port: debugPort }, async function(client) {
       file.writeFile(output, buffer, 'base64', function(err) {
         if (err) {
           console.error(err);
-        } else {
-          console.log('Screenshot saved');
         }
         client.close();
       });

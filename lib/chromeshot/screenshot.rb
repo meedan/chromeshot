@@ -7,7 +7,7 @@ module Chromeshot
     attr_accessor :debug_port
 
     def self.setup_chromeshot(debug_port)
-      system "LC_ALL=C google-chrome --headless --hide-scrollbars --remote-debugging-port=#{debug_port} --disable-gpu --no-sandbox --ignore-certificate-errors &"
+      system "LC_ALL=C google-chrome --headless --hide-scrollbars --remote-debugging-port=#{debug_port} --remote-debugging-address=0.0.0.0 --disable-gpu --no-sandbox --ignore-certificate-errors &"
     end
 
     def initialize(options = {})

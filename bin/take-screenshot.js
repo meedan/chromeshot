@@ -6,7 +6,7 @@ const file = require('fs');
 const url = argv.url || 'https://www.google.com';
 const format = argv.format === 'jpeg' ? 'jpeg' : 'png';
 const viewportWidth = argv.viewportWidth || 1440;
-const viewportHeight = argv.viewportHeight || 900;
+let viewportHeight = argv.viewportHeight || 900;
 const delay = argv.delay || 0;
 const userAgent = argv.userAgent;
 const fullPage = argv.full;

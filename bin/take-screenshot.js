@@ -54,10 +54,10 @@ CDP({ port: debugPort }, async function(client) {
       });
       const {model: {height}} = await DOM.getBoxModel({nodeId: bodyNodeId});
 
-      await Emulation.setVisibleSize({width: viewportWidth, height: height});
-      // This forceViewport call ensures that content outside the viewport is
-      // rendered, otherwise it shows up as grey. Possibly a bug?
-      await Emulation.forceViewport({x: 0, y: 0, scale: 1});
+      viewportHeight = model.height;
+      deviceMetrics.height = viewportHeight;
+      await Emulation.setDeviceMetricsOverride(deviceMetrics)
+      await Emulation.setVisibleSize({width: viewportWidth, height: viewportHeight});
     }
 
     setTimeout(async function() {

@@ -6,7 +6,7 @@ const file = require('fs');
 const url = argv.url || 'https://www.google.com';
 const format = argv.format === 'jpeg' ? 'jpeg' : 'png';
 const viewportWidth = argv.viewportWidth || 1440;
-let viewportHeight = argv.viewportHeight || 900;
+let viewportHeight = argv.viewportHeight || 800;
 const delay = argv.delay || 0;
 const userAgent = argv.userAgent;
 const fullPage = argv.full;
@@ -47,19 +47,11 @@ CDP({ port: debugPort }, async function(client) {
     // If the `full` CLI option was passed, we need to measure the height of
     // the rendered page and use Emulation.setVisibleSize
     if (fullPage) {
-      const {root: {nodeId: documentNodeId}} = await DOM.getDocument();
-      const {nodeId: bodyNodeId} = await DOM.querySelector({
-        selector: 'body',
-        nodeId: documentNodeId,
-      });
-      const { model } = await DOM.getBoxModel({nodeId: bodyNodeId});
-
-      console.log(viewportHeight);
-      viewportHeight = model.height;
-      console.log(viewportHeight);
+      const { result: { value } } = await Runtime.evaluate({ expression: 'document.body.scrollHeight' });
+      viewportHeight = value;
       deviceMetrics.height = viewportHeight;
       await Emulation.setDeviceMetricsOverride(deviceMetrics)
-      await Emulation.setVisibleSize({width: viewportWidth, height: viewportHeight});
+      await Emulation.setVisibleSize({width: viewportWidth, height: viewportHeight});      
     }
 
     setTimeout(async function() {
@@ -67,7 +59,7 @@ CDP({ port: debugPort }, async function(client) {
       const buffer = new Buffer(screenshot.data, 'base64');
       file.writeFile(output, buffer, 'base64', function(err) {
         if (err) {
-          console.error(err);
+          console.log(err);
         }
         client.close();
       });

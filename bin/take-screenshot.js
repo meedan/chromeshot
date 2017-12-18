@@ -54,7 +54,9 @@ CDP({ port: debugPort }, async function(client) {
       });
       const { model } = await DOM.getBoxModel({nodeId: bodyNodeId});
 
+      console.log(viewportHeight);
       viewportHeight = model.height;
+      console.log(viewportHeight);
       deviceMetrics.height = viewportHeight;
       await Emulation.setDeviceMetricsOverride(deviceMetrics)
       await Emulation.setVisibleSize({width: viewportWidth, height: viewportHeight});

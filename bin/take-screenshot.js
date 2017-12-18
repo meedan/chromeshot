@@ -29,7 +29,7 @@ CDP({ port: debugPort }, async function(client) {
   }
 
   // Set up viewport resolution, etc.
-  const deviceMetrics = {
+  let deviceMetrics = {
     width: viewportWidth,
     height: viewportHeight,
     deviceScaleFactor: 0,
@@ -52,7 +52,7 @@ CDP({ port: debugPort }, async function(client) {
         selector: 'body',
         nodeId: documentNodeId,
       });
-      const {model: {height}} = await DOM.getBoxModel({nodeId: bodyNodeId});
+      const { model } = await DOM.getBoxModel({nodeId: bodyNodeId});
 
       viewportHeight = model.height;
       deviceMetrics.height = viewportHeight;

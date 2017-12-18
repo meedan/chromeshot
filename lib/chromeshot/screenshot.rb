@@ -16,7 +16,7 @@ module Chromeshot
 
     def take_screenshot(options = {})
       screenshoter = File.join Chromeshot.root, 'bin', 'take-screenshot.js'
-      system 'nodejs', screenshoter, "--url=#{options[:url]}", "--output=#{options[:output]}", "--delay=3", "--debugPort=#{self.debug_port}"
+      system 'nodejs', screenshoter, "--url=#{options[:url]}", "--output=#{options[:output]}", "--delay=5", "--debugPort=#{self.debug_port}", "--full=true"
       system 'convert', Shellwords.escape(options[:output]), '-trim', '-strip', '-quality', '90', Shellwords.escape(options[:output])
     end
 

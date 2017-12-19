@@ -47,7 +47,19 @@ CDP({ port: debugPort }, async function(client) {
     // If the `full` CLI option was passed, we need to measure the height of
     // the rendered page and use Emulation.setVisibleSize
     if (fullPage) {
-      const { result: { value } } = await Runtime.evaluate({ expression: 'document.body.scrollHeight' });
+      const func = `var getMaxHeight = function() {
+                      var node = document.body;
+                      var maxHeight = document.body.scrollHeight;
+                      var children = new Array();
+                      for (var child in node.childNodes) {
+                        if (node.childNodes[child].scrollHeight > maxHeight) {
+                          maxHeight = node.childNodes[child].scrollHeight;
+                        }
+                      }
+                      return maxHeight;
+                    };
+                    getMaxHeight();`
+      const { result: { value } } = await Runtime.evaluate({ expression: func });
       viewportHeight = value;
       deviceMetrics.height = viewportHeight;
       await Emulation.setDeviceMetricsOverride(deviceMetrics)

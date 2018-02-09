@@ -12,6 +12,7 @@ const userAgent = argv.userAgent;
 const fullPage = argv.full;
 const output = argv.output || 'output.png';
 const debugPort = argv.debugPort || 9333;
+const script = argv.script || null;
 
 // Start the Chrome Debugging Protocol
 CDP({ port: debugPort }, async function(client) {
@@ -50,6 +51,13 @@ CDP({ port: debugPort }, async function(client) {
       const func = `var getMaxHeight = function() {
                       var node = document.body;
                       var maxHeight = document.body.scrollHeight;
+                      var viewportHeight = window.innerHeight;
+                      if (viewportHeight > maxHeight) {
+                        maxHeight = viewportHeight;
+                      }
+                      if (maxHeight < 900) {
+                        maxHeight = 900;
+                      }
                       var children = new Array();
                       for (var child in node.childNodes) {
                         if (node.childNodes[child].scrollHeight > maxHeight) {
@@ -63,7 +71,11 @@ CDP({ port: debugPort }, async function(client) {
       viewportHeight = value;
       deviceMetrics.height = viewportHeight;
       await Emulation.setDeviceMetricsOverride(deviceMetrics)
-      await Emulation.setVisibleSize({width: viewportWidth, height: viewportHeight});      
+      await Emulation.setVisibleSize({width: viewportWidth, height: viewportHeight});
+
+      if (script) {
+        await Runtime.evaluate({ expression: script });
+      }
     }
 
     setTimeout(async function() {

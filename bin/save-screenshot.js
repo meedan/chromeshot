@@ -5,6 +5,7 @@ const file = require('fs');
 const tab = argv.tab;
 const output = argv.output || 'output.png';
 const debugPort = argv.debugPort || 9333;
+const script = argv.script || null;
 
 let deviceMetrics = {
   width: 1440,
@@ -21,6 +22,13 @@ CDP({ port: debugPort, tab }, async function(client) {
     const func = `var getMaxHeight = function() {
                     var node = document.body;
                     var maxHeight = document.body.scrollHeight;
+                    var viewportHeight = window.innerHeight;
+                    if (viewportHeight > maxHeight) {
+                      maxHeight = viewportHeight;
+                    }
+                    if (maxHeight < 900) {
+                      maxHeight = 900;
+                    }
                     var children = new Array();
                     for (var child in node.childNodes) {
                       if (node.childNodes[child].scrollHeight > maxHeight) {
@@ -35,6 +43,10 @@ CDP({ port: debugPort, tab }, async function(client) {
     deviceMetrics.height = viewportHeight;
     await Emulation.setDeviceMetricsOverride(deviceMetrics)
     await Emulation.setVisibleSize({ width: 1440, height: viewportHeight });
+
+    if (script) {
+      await Runtime.evaluate({ expression: script });
+    }
 
     const screenshot = await Page.captureScreenshot({ format: 'png' });
     const buffer = new Buffer(screenshot.data, 'base64');

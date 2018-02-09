@@ -23,7 +23,7 @@ module Chromeshot
     # Load page in a new tab, set the viewport size, wait a little and return the tab id
     def load_page_in_new_tab(options = {})
       screenshoter = File.join Chromeshot.root, 'bin', 'load-screenshot.js'
-      tab = `nodejs #{screenshoter} --url=#{options[:url]} --delay=5 --debugPort=#{self.debug_port}`
+      tab = `nodejs #{screenshoter} --url='#{options[:url]}' --delay=5 --debugPort=#{self.debug_port}`
       tab.chomp
     end
 

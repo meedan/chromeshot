@@ -15,6 +15,10 @@ let deviceMetrics = {
   fitWindow: false,
 };
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 // Start the Chrome Debugging Protocol
 CDP({ port: debugPort, tab }, async function(client) {
   const { Emulation, Page, Runtime } = client;
@@ -43,6 +47,7 @@ CDP({ port: debugPort, tab }, async function(client) {
     deviceMetrics.height = viewportHeight;
     await Emulation.setDeviceMetricsOverride(deviceMetrics)
     await Emulation.setVisibleSize({ width: 1440, height: viewportHeight });
+    await sleep(3000);
 
     if (script) {
       await Runtime.evaluate({ expression: script });

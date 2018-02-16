@@ -17,7 +17,7 @@ module Chromeshot
     def take_screenshot(options = {})
       screenshoter = File.join Chromeshot.root, 'bin', 'take-screenshot.js'
       system 'nodejs', screenshoter, "--url=#{options[:url]}", "--output=#{options[:output]}", "--delay=5", "--debugPort=#{self.debug_port}", "--full=true", "--script=#{options[:script]}"
-      system 'convert', Shellwords.escape(options[:output]), '-trim', '-strip', '-quality', '90', Shellwords.escape(options[:output])
+      system 'convert', options[:output], '-trim', '-strip', '-quality', '90', options[:output]
     end
 
     # Load page in a new tab, set the viewport size, wait a little and return the tab id
@@ -31,7 +31,7 @@ module Chromeshot
     def take_screenshot_from_tab(options = {})
       screenshoter = File.join Chromeshot.root, 'bin', 'save-screenshot.js'
       system 'nodejs', screenshoter, "--tab=#{options[:tab]}", "--output=#{options[:output]}", "--debugPort=#{self.debug_port}", "--script=#{options[:script]}"
-      system 'convert', Shellwords.escape(options[:output]), '-trim', '-strip', '-quality', '90', Shellwords.escape(options[:output])
+      system 'convert', options[:output], '-trim', '-strip', '-quality', '90', options[:output]
     end
 
     def take_screenshot!(params = {})

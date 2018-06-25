@@ -7,7 +7,6 @@ module Chromeshot
     attr_accessor :debug_port
 
     def self.setup_chromeshot(debug_port)
-      #system "LC_ALL=C google-chrome --headless --enable-logging --hide-scrollbars --remote-debugging-port=#{debug_port} --remote-debugging-address=0.0.0.0 --disable-gpu --no-sandbox --ignore-certificate-errors &"
 
     end
 
@@ -18,7 +17,8 @@ module Chromeshot
     def take_screenshot(options = {})
 
 
-      system "LC_ALL=C google-chrome --headless --enable-logging --hide-scrollbars --remote-debugging-port=#{debug_port} --remote-debugging-address=0.0.0.0 --disable-gpu --no-sandbox --ignore-certificate-errors --disable-default-apps --disable-extensions --disable-sync --disable-translate --hide-scrollbars --metrics-recording-only --mute-audio --no-first-run --safebrowsing-disable-auto-update --ignore-ssl-errors --ignore-certificate-errors-spki-lis &"
+      #system "LC_ALL=C google-chrome --headless --enable-logging --hide-scrollbars --remote-debugging-port=#{debug_port} --remote-debugging-address=0.0.0.0 --disable-gpu --no-sandbox --ignore-certificate-errors --disable-default-apps --disable-extensions --disable-sync --disable-translate --hide-scrollbars --metrics-recording-only --mute-audio --no-first-run --safebrowsing-disable-auto-update --ignore-ssl-errors --ignore-certificate-errors-spki-lis &"
+      system "LC_ALL=C google-chrome --headless --enable-logging --hide-scrollbars --remote-debugging-port=#{debug_port} --remote-debugging-address=0.0.0.0 --disable-gpu --no-sandbox --ignore-certificate-errors &"
 
       screenshoter = File.join Chromeshot.root, 'bin', 'take-screenshot.js'
       system 'nodejs', screenshoter, "--url=#{options[:url]}", "--output=#{options[:output]}", "--delay=5", "--debugPort=#{self.debug_port}", "--full=true", "--script=#{options[:script]}"

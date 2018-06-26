@@ -8,20 +8,21 @@ module Chromeshot
     attr_accessor :debug_port
 
     def self.setup_chromeshot(debug_port)
-        logger = LogStashLogger.new(port: 5228)
+        #logger = LogStashLogger.new(port: 5228)
     end
 
     def initialize(options = {})
       self.debug_port = options[:debug_port] || 9555
+      Rails.logger = Logger.new(STDOUT)
     end
 
     def take_screenshot(options = {})
 
 
       #system "LC_ALL=C google-chrome --headless --enable-logging --hide-scrollbars --remote-debugging-port=#{debug_port} --remote-debugging-address=0.0.0.0 --disable-gpu --no-sandbox --ignore-certificate-errors --disable-default-apps --disable-extensions --disable-sync --disable-translate --hide-scrollbars --metrics-recording-only --mute-audio --no-first-run --safebrowsing-disable-auto-update --ignore-ssl-errors --ignore-certificate-errors-spki-lis &"
-      logger.info 'Debug port'
-      logger.info self.debug_port
-      system "LC_ALL=C google-chrome --headless --enable-logging --hide-scrollbars --remote-debugging-port=#{self.debug_port} --remote-debugging-address=0.0.0.0 --disable-gpu --no-sandbox --ignore-certificate-errors &"
+      logger.info ("Debug port:")
+      logger.info (self.debug_port)
+      system "LC_ALL=C google-chrome --headless --enable-logging --hide-scrollbars --remote-debugging-port=9444 --remote-debugging-address=0.0.0.0 --disable-gpu --no-sandbox --ignore-certificate-errors &"
 
 
       screenshoter = File.join Chromeshot.root, 'bin', 'take-screenshot.js'

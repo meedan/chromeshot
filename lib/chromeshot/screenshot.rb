@@ -1,5 +1,6 @@
 require 'shellwords'
 require 'mini_magick'
+require 'logstash-logger'
 
 module Chromeshot
   class Screenshot
@@ -7,7 +8,7 @@ module Chromeshot
     attr_accessor :debug_port
 
     def self.setup_chromeshot(debug_port)
-        $debug_port = debug_port
+        logger = LogStashLogger.new(port: 5228)
     end
 
     def initialize(options = {})
@@ -18,8 +19,8 @@ module Chromeshot
 
 
       #system "LC_ALL=C google-chrome --headless --enable-logging --hide-scrollbars --remote-debugging-port=#{debug_port} --remote-debugging-address=0.0.0.0 --disable-gpu --no-sandbox --ignore-certificate-errors --disable-default-apps --disable-extensions --disable-sync --disable-translate --hide-scrollbars --metrics-recording-only --mute-audio --no-first-run --safebrowsing-disable-auto-update --ignore-ssl-errors --ignore-certificate-errors-spki-lis &"
-      puts "Debug port: "
-      puts self.debug_port
+      logger.info 'Debug port'
+      logger.info self.debug_port
       system "LC_ALL=C google-chrome --headless --enable-logging --hide-scrollbars --remote-debugging-port=#{self.debug_port} --remote-debugging-address=0.0.0.0 --disable-gpu --no-sandbox --ignore-certificate-errors &"
 
 

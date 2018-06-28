@@ -15,7 +15,7 @@ module Chromeshot
 
     def take_screenshot(options = {})
 
-      system "LC_ALL=C google-chrome --headless --enable-logging --hide-scrollbars --remote-debugging-port=#{debug_port} --remote-debugging-address=0.0.0.0 --disable-gpu --no-sandbox --ignore-certificate-errors &"
+      system "LC_ALL=C google-chrome --headless --enable-logging --hide-scrollbars --remote-debugging-port=#{self.debug_port} --remote-debugging-address=0.0.0.0 --disable-gpu --no-sandbox --ignore-certificate-errors &"
       sleep(30);
 
       screenshoter = File.join Chromeshot.root, 'bin', 'take-screenshot.js'

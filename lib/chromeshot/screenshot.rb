@@ -20,10 +20,15 @@ module Chromeshot
 
 
       #system "LC_ALL=C google-chrome --headless --enable-logging --hide-scrollbars --remote-debugging-port=#{debug_port} --remote-debugging-address=0.0.0.0 --disable-gpu --no-sandbox --ignore-certificate-errors --disable-default-apps --disable-extensions --disable-sync --disable-translate --hide-scrollbars --metrics-recording-only --mute-audio --no-first-run --safebrowsing-disable-auto-update --ignore-ssl-errors --ignore-certificate-errors-spki-lis &"
-      logger.info ("Debug port:")
-      logger.info (self.debug_port)
-      system "LC_ALL=C google-chrome --headless --enable-logging --hide-scrollbars --remote-debugging-port=9444 --remote-debugging-address=0.0.0.0 --disable-gpu --no-sandbox --ignore-certificate-errors &"
-
+      #logger.info ("Debug port:")
+      #logger.info (self.debug_port)
+      
+      command = Thread.new do
+        system "LC_ALL=C google-chrome --headless --enable-logging --hide-scrollbars --remote-debugging-port=#{self.debug_port} --remote-debugging-address=0.0.0.0 --disable-gpu --no-sandbox --ignore-certificate-errors &"
+      end
+      command.join # main programm waiting for thread
+     
+      puts "Chrome is running now"
 
       screenshoter = File.join Chromeshot.root, 'bin', 'take-screenshot.js'
       system 'nodejs', screenshoter, "--url=#{options[:url]}", "--output=#{options[:output]}", "--delay=5", "--debugPort=#{self.debug_port}", "--full=true", "--script=#{options[:script]}"

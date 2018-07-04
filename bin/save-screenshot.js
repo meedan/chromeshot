@@ -1,6 +1,7 @@
 const CDP = require('chrome-remote-interface');
 const argv = require('minimist')(process.argv.slice(2));
 const file = require('fs');
+const util = require('util');
 
 const tab = argv.tab;
 const output = argv.output || 'output.png';
@@ -57,7 +58,17 @@ CDP({ port: debugPort, tab }, async function(client) {
     const buffer = new Buffer(screenshot.data, 'base64');
     file.writeFileSync(output, buffer);
     await CDP.Close({ id: tab, port: debugPort });
-    process.exit();
+    await sleep(5000);
+
+    await CDP.List({ port: debugPort }, async function(err, tabs) {
+      if (tabs.length === 1 && tabs[0].url === 'chrome://newtab/') {
+        await CDP.Close({ port: debugPort, id: tabs[0].id }, async function(err) {
+          if (!err) {
+            process.exit();
+          }
+        });
+      }
+    });
   });
 }).on('error', err => {
   console.error('Cannot connect to browser:', err);

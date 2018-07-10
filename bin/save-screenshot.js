@@ -61,7 +61,8 @@ CDP({ port: debugPort, tab }, async function(client) {
     await sleep(5000);
 
     await CDP.List({ port: debugPort }, async function(err, tabs) {
-      if (tabs.length === 1 && tabs[0].url === 'chrome://newtab/') {
+      if (tabs.length === 1) {
+        console.log('Only one tab left, whose URL is ' + tabs[0].url);
         await CDP.Close({ port: debugPort, id: tabs[0].id }, async function(err) {
           if (!err) {
             process.exit();

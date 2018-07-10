@@ -2,6 +2,7 @@ const CDP = require('chrome-remote-interface');
 const argv = require('minimist')(process.argv.slice(2));
 const file = require('fs');
 const util = require('util');
+const shell = require('shelljs');
 
 const tab = argv.tab;
 const output = argv.output || 'output.png';
@@ -61,10 +62,11 @@ CDP({ port: debugPort, tab }, async function(client) {
     await sleep(5000);
 
     await CDP.List({ port: debugPort }, async function(err, tabs) {
-      console.log('TABS: ' + util.inspect(tabs));
       if (tabs.length === 1 && (tabs[0].url === 'chrome://newtab/' || tabs[0].url === 'about:blank')) {
         await CDP.Close({ port: debugPort, id: tabs[0].id }, async function(err) {
           if (!err) {
+            const pid = parseInt(file.readFileSync('/tmp/chromeshot.pid').toString(), 10);
+            shelljs.exec('kill -9 ' + pid);
             process.exit();
           }
         });

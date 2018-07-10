@@ -20,7 +20,8 @@ function isChromeRunning() {
 async function setupChromeshot() {
   let chromeRunning = isChromeRunning();
   if (!chromeRunning) {
-    shell.exec(`LC_ALL=C google-chrome --headless --enable-logging --hide-scrollbars --remote-debugging-port=${debugPort} --remote-debugging-address=0.0.0.0 --disable-gpu --no-sandbox --ignore-certificate-errors &`, { async: true });
+    const proc = shell.exec(`LC_ALL=C google-chrome --headless --enable-logging --hide-scrollbars --remote-debugging-port=${debugPort} --remote-debugging-address=0.0.0.0 --disable-gpu --no-sandbox --ignore-certificate-errors &`, { async: true });
+    file.writeFileSync('/tmp/chromeshot.pid', proc.pid);
     await sleep(10);
   }
 }

@@ -66,7 +66,7 @@ CDP({ port: debugPort, tab }, async function(client) {
         await CDP.Close({ port: debugPort, id: tabs[0].id }, async function(err) {
           if (!err) {
             const pid = parseInt(file.readFileSync('/tmp/chromeshot.pid').toString(), 10);
-            shelljs.exec('kill -9 ' + pid);
+            shell.exec('kill -9 ' + pid);
             process.exit();
           }
         });

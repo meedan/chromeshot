@@ -61,6 +61,7 @@ CDP({ port: debugPort, tab }, async function(client) {
     await sleep(5000);
 
     await CDP.List({ port: debugPort }, async function(err, tabs) {
+      console.log('TABS: ' + util.inspect(tabs));
       if (tabs.length === 1 && (tabs[0].url === 'chrome://newtab/' || tabs[0].url === 'about:blank')) {
         await CDP.Close({ port: debugPort, id: tabs[0].id }, async function(err) {
           if (!err) {
